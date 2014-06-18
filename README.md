@@ -11,3 +11,24 @@ cssInject.add("#content > p", "font-weight", "bold"); // Standard CSS selectors 
 
 cssInject.apply() // Takes the queued styles and injects them into a <style> in the document head.
 ```
+
+### Chaining Example ###
+```javascript
+cssInject.add("#content", "height", "200px").add("#content", "width", "300px").apply(); // Adding two styles to the same selectors maps the properties to a single selector in the queue. This then gets injected out as a single #content {} style rule containing both properties.
+```
+
+### Advanced: Full Object import ###
+```javascript
+// You can declare a full object containing corresponding selectors and assigned properties. These automatically get tracked according to existing queued selectors if there are any matches. In a valid object to pass to cssInject, the top level key corresponds to the selector, and the second level keys correspond to the css properties.
+var rules = {
+	"#content" : {
+		"height": "200px",
+		"width": "300px"
+	}
+}, selector = "#content";
+// Selectors can be dynamically defined and attached to an object.
+rules[selector] = {
+	"background-color":"#ccc"
+}
+cssInject.objectAdd(rules).apply(); // Inject the resulting CSS to the page
+```
