@@ -57,13 +57,14 @@ var rules = {
 // Selectors can be dynamically defined and attached to an object.
 rules[selector] = {
 	"background-color":"#ccc"
-}
+};
 cssInject.objectAdd(rules).apply(); // Inject the resulting CSS to the page
 ```
 
 ## Usage
-Just include the script and away you go.
+Just include the script and away you go. The minified file is 1.04kB large, so it has a tiny footprint on your site. The only dependency is jQuery (Most recent versions recommended).
 ```html
+<script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript" src="css-inject.min.js"></script>
 <script type="text/javascript">
 
