@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Testing</title>
+<link rel="stylesheet" href="styles.css">
+<script src="jquery.js"></script>
+<script>jQuery.noConflict();</script>
+<script src="../src/css-inject.js"></script>
+<script>
+(function($, css){
+	"use strict";
+	$(document).ready(function(){
+		var t1, t2, t3, t4, t5, text, stuff = {}, div;
+		$("<div id=\"stuff\"></div>").appendTo("body");
+		div = $("#stuff");
+		t1 = performance.now();
+		css.add("#rt-main", "background", "#999");
+		css.add("#rt-main", "color", "#fff");
+		css.add("#rt-main", "font-weight", "bold");
+		css.add("#rt-main", "padding", "15px");
+		css.add("body", "font-family", "Consolas, monospace");
+		css.add("body", "font-size", "14px");
+		css.add("#stuff","border","3px solid #000");
+		stuff[div.selector] = {
+			"margin":"15px auto",
+			"width":"200px",
+			"height":"200px",
+			"background":"blue"
+		};
+		
+		css.objectAdd(stuff);
+		t2 = performance.now();
+		css.apply();
+		t3 = performance.now();
+		console.log("Time to add 10 styles: "+(t1 - t2));
+		console.log("Time to apply styles: "+(t2 - t3));
+		function gogo () {
+			t4 = performance.now();
+			css.add("#rt-main", "font-weight", "normal").add("#rt-main", "background", "#555").add("#rt-main > p", "margin", "0").add("#stuff","background","red").apply();
+			t5 = performance.now();
+			console.log("Time to reapply chained styles: "+(t4 - t5));
+		}
+		function nope () {
+			css.remove("#rt-main > p", "margin").remove("#stuff").apply();
+		}
+		setTimeout(gogo, 2000);
+		setTimeout(nope, 4000);
+	});
+}(jQuery, cssInject));
+</script>
+</head>
+<body>
+<div id="rt-main">
+<p>This be great stuff!</p>
+</div>
+
+</body>
+</html>

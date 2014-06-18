@@ -1,0 +1,6 @@
+body {margin:0;padding:0;font-size:16px;font-family:Arial, Helvetica, sans-serif;}
+#rt-main {margin:30px;background:#e6e6e6;color:#333;}
+#modalbox {}
+#modalbox .box {display:none;padding:15px;background:#fff;position:fixed;top:0;bottom:0;left:0;right:0;margin:auto;z-index:9999;}
+#modalbox .mask {display:none;z-index:9998;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;opacity:0;}
+#modalbox .close {display:block;height:16px;width:16px;background:#666;border-radius:8px;position:absolute;top:-8px;right:-8px;}
