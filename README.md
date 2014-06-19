@@ -63,8 +63,8 @@ cssInject.objectAdd(rules).apply(); // Inject the resulting CSS to the page
 
 ### Advanced: Direct Object import
 ```js
-// If mapping an object to existing styles isn't a concern, you can bypass the object import functions.
-// As long as the object you pass to cssInject is correctly formed, it'll then be able to parse the styles.
+// If mapping an object to existing styles isn't a concern, you can bypass cssInject.objectAdd()
+// As long as the object you pass to cssInject is correctly formed, it'll then be able to parse.
 cssInject.styles = {
 	"#content" : {
 		"height" : "200px",
