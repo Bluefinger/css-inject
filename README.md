@@ -72,8 +72,8 @@ cssInject.styles = {
 	}
 };
 
-// Directly adding objects to cssInject.styles overrides any existing styles. This can also be used to reset
-// the queued styles by passing an empty object.
+// Directly adding objects to cssInject.styles overrides any existing styles.
+// This can also be used to reset the queued styles by passing an empty object.
 cssInject.styles = {};
 ```
 
@@ -123,7 +123,8 @@ Returns the jQuery object for the injected stylesheet. Used for quick reference 
 Adds the specified CSS rules to the `cssInject.styles` object, mapping the properties to any existing and matching selectors or creating a new selector object. The `selector`, `property`, and `value` parameters must all be strings.  This method can be chained.
 ```js
 cssInject.add("#content", "height", "200px"); // Single call input
-cssInject.add("#content", "width", "300px").add("#content > p", "font-weight", "bold"); // Chaining example
+// Chaining example
+cssInject.add("#content", "width", "300px").add("#content > p", "font-weight", "bold");
 ```
 
 #### cssInject.objectAdd(object)
@@ -166,7 +167,8 @@ cssInject.fn.stuff = function () {
 	// do Stuff
 	return this;
 };
-// The 'this' scope can be stored in a variable to prevent scoping issues, and that can be passed back in the 'return' call.
+// The 'this' scope can be stored in a variable to prevent scoping issues,
+// and that can be passed back in the 'return' call.
 cssInject.fn.stuff = function () {
 	var self = this;
 	// do Stuff
