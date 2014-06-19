@@ -134,7 +134,7 @@ Maps a given object to the `cssInject.styles` object. Allows multiple rules to b
 var rules = {
 	"#content" : {
 		"height" : "200px",
-		"width: : "300px"
+		"width": : "300px"
 	}
 };
 cssInject.objectAdd(rules); // Import object into queue
