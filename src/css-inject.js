@@ -11,7 +11,9 @@
 		var self = this;
 		if (!(self instanceof CssInject)) return new CssInject();
 		self.head = '';
+		self.elem = "css-inject-style";
 		self.styles = {};
+		self.noIE = false;
 	};
 	CssInject.fn = CssInject.prototype = {
 		parse : function () {
@@ -64,16 +66,19 @@
 		},
 		
 		apply : function () {
-			var css, self = this;
-			if (self.head) {
-				css = self.parse();
-				self.head.html(css);
+			var css, text, self = this;
+			text = self.parse();
+			if (self.head && !self.noIE) {
+				css = '<style id="'+self.elem+'" type="text/css">'+text+'</style>';
+				self.head.replaceWith(css);
+				self.head = $('#'+self.elem);
+			} else if (self.head && self.noIE) {
+				self.head.html(text);
 			} else {
-				css = self.parse();
-				if (css) {
-					css = "<style id=\"css-inject-style\" type=\"text/css\">" + css + "</style>";
-					$(css).appendTo("head");
-					self.head = $("#css-inject-style");
+				if (text) {
+					css = '<style id="'+self.elem+'" type="text/css">'+text+'</style>';
+					$(css).appendTo('head');
+					self.head = $('#'+self.elem);
 				}
 			}
 			return self;
