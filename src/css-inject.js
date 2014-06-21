@@ -53,17 +53,17 @@
 			return this;
 		};
 		this.apply = function () {
-			var css, text;
-			text = this.parse();
+			var css= '<style id="'+this.elem+'" type="text/css">', 
+				text = this.parse();
 			if (head && !this.noIE) {
-				css = '<style id="'+this.elem+'" type="text/css">'+text+'</style>';
+				css += text + '</style>';
 				head.replaceWith(css);
 				head = $('#'+this.elem);
 			} else if (head && this.noIE) {
 				head.html(text);
 			} else {
 				if (text) {
-					css = '<style id="'+this.elem+'" type="text/css">'+text+'</style>';
+					css += text + '</style>';
 					$(css).appendTo('head');
 					head = $('#'+this.elem);
 				}

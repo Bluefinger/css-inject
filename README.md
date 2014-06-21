@@ -93,6 +93,8 @@ Just include the script and away you go. The minified file is 1.18kB large, so i
 
 </script>
 ```
+### Tips
+Use a conditional to set `cssInject.noIE` to true when dealing with modern browsers, and to set to false when being loaded in IE8. This way, modern browsers like Chrome and Firefox can take advantage of quicker/simpler update methods whilst still supporting older browsers.
 
 ## Documentation
 * [Object Model](#object-model)
