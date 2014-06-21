@@ -53,19 +53,15 @@
 			return this;
 		};
 		this.apply = function () {
-			var css= '<style id="'+this.elem+'" type="text/css">', 
-				text = this.parse();
-			if (head && !this.noIE) {
-				css += text + '</style>';
-				head.replaceWith(css);
-				head = $('#'+this.elem);
+			var css = this.parse(),
+				style = (!head || !this.noIE) ? $('<style id="'+this.id+'" type="text/css">'+css+'</style>') : '';
+			if (head && !this.noIE) { // Due to IE 8 not allowing the contents of <style> elements to be changed, it must be replaced out instead with a new <style> element with the updated CSS.
+				head = style.replaceAll(head);
 			} else if (head && this.noIE) {
-				head.html(text);
+				head.html(css);
 			} else {
-				if (text) {
-					css += text + '</style>';
-					$(css).appendTo('head');
-					head = $('#'+this.elem);
+				if (css) {
+					head = style.appendTo('head');
 				}
 			}
 			return this;
@@ -73,7 +69,7 @@
 	},
 	
 	CssInject = function () {
-		this.elem = "css-inject-style";
+		this.id = "css-inject-style";
 		this.styles = {};
 		this.noIE = false;
 	};

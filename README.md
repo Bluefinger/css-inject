@@ -83,7 +83,7 @@ cssInject.styles = {};
 ```
 
 ## Usage
-Just include the script and away you go. The minified file is 1.18kB large, so it has a tiny footprint on your site. The only dependency is jQuery (Most recent versions recommended).
+Just include the script and away you go. The minified file is 1.09kB large, so it has a tiny footprint on your site. The only dependency is jQuery (Most recent versions recommended).
 ```html
 <script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript" src="css-inject.min.js"></script>
@@ -122,7 +122,7 @@ cssInject.styles["#content"] // Returns the object containing the properties for
 cssInject.styles["#content"]["height"] // Returns the value stored for a given selector and property.
 ```
 
-#### cssInject.elem
+#### cssInject.id
 Stores the string which forms the id attribute for the generated stylesheet. Change from the default of `css-inject-style` if in need of a different id or to resolve a conflict.
 
 #### cssInject.noIE
