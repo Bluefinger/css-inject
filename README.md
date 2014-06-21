@@ -98,7 +98,7 @@ Use a conditional to set `cssInject.noIE` to true when dealing with modern brows
 
 ## Documentation
 * [Object Model](#object-model)
-* [Variables](#variables)
+* [Properties](#properties)
 * [Functions](#functions)
 * [Extend](#extend)
 
@@ -113,7 +113,7 @@ Use a conditional to set `cssInject.noIE` to true when dealing with modern brows
 ```
 This allows an object to mirror the logical construction of a CSS style rule, and in turn simplifies the process of traversing the object to match and add/amend styles, as well as parsing out the object into CSS.
 
-### Variables
+### Properties
 #### cssInject.styles
 Returns the object containing the styles to be injected. For individual properties or selectors, access `cssInject.styles[selector][properties]` as such in order to account for the string based keys. 
 ```js
