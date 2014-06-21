@@ -4,6 +4,11 @@ CSS-Inject is a small utility script for handling dynamic injection of CSS styli
 
 CSS-Inject can track and handle subsequent changes to the generated stylesheet. By only injecting the generated styles when specifically called, it reduces the amount of times the DOM gets manipulated and allows for multiple style changes to be queued before being rendered. The result is a much more efficient way to approach dynamic styling, in cases where extensive DOM manipulation can be avoided for the sake of simply applying additional or calculated styles.
 
+## Caveat
+CSS-Inject's performance depends on the limited amount of times that the script injects styles into the document. A single style injection is going to be more performant than 3. Queueing up as many styles before applying them will generally yield a much quicker response than using jQuery to iterate and apply styles to all the targeted elements. However, if there is only a single element being styled, jQuery is sufficient on its own to do this as CSS-Inject does not perform better than jQuery against styling a single element. CSS-Inject is intended to scale better when applying styles to more than one element on a given page.
+
+Also in order to support Internet Explorer 8, the performance of updating an injected stylesheet is worse than the creation of one. There is a flag `cssInject.noIE` which when set to true, drops the support for IE8 and improves the performance of updating the generated stylesheet.
+
 ## Quick Example
 ```javascript
 cssInject.add("#content", "height", "200px"); // Add a CSS rule for a selector, property and value
@@ -42,7 +47,7 @@ cssInject.apply();
 cssInject.remove("#content > p", "font-weight").remove("#content").apply();
 ```
 
-### Advanced: Mapped Object import
+### Mapped Object import
 ```javascript
 // You can declare an object containing corresponding selectors and assigned properties. 
 // These automatically get tracked according to existing queued selectors if there are any matches. 
@@ -61,7 +66,7 @@ rules[selector] = {
 cssInject.objectAdd(rules).apply(); // Inject the resulting CSS to the page
 ```
 
-### Advanced: Direct Object import
+### Direct Object import
 ```js
 // If mapping an object to existing styles isn't a concern, you can bypass cssInject.objectAdd()
 // As long as the object you pass to cssInject is correctly formed, it'll then be able to parse.
@@ -110,13 +115,16 @@ This allows an object to mirror the logical construction of a CSS style rule, an
 #### cssInject.styles
 Returns the object containing the styles to be injected. For individual properties or selectors, access `cssInject.styles[selector][properties]` as such in order to account for the string based keys. 
 ```js
-cssInject.styles // Returns full object with every rules
+cssInject.styles // Returns full object with every rule
 cssInject.styles["#content"] // Returns the object containing the properties for the #content selector
-cssInject.styles["#content"]["height"] // Returns the value stored for that selector and property.
+cssInject.styles["#content"]["height"] // Returns the value stored for a given selector and property.
 ```
 
-#### cssInject.head
-Returns the jQuery object for the injected stylesheet. Used for quick reference when updating the generated css.
+#### cssInject.elem
+Stores the string which forms the id attribute for the generated stylesheet. Change from the default of `css-inject-style` if in need of a different id or to resolve a conflict.
+
+#### cssInject.noIE
+Stores a boolean value to indicate whether to enable support of older IE browsers. Default set to `false`. If set to `true`, it disables the workaround to enable stylesheet updates in IE8. If set to true, stylesheet creation still works in IE8, but updates will incur errors.
 
 ### Functions
 #### cssInject.add(selector, property, value)
@@ -166,12 +174,5 @@ cssInject.apply(); // Applies a stylesheet to the document head containing all s
 cssInject.fn.stuff = function () {
 	// do Stuff
 	return this;
-};
-// The 'this' scope can be stored in a variable to prevent scoping issues,
-// and that can be passed back in the 'return' call.
-cssInject.fn.stuff = function () {
-	var self = this;
-	// do Stuff
-	return self;
 };
 ```
