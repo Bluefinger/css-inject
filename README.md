@@ -83,7 +83,7 @@ cssInject.styles = {};
 ```
 
 ## Usage
-Just include the script and away you go. The minified file is 1.04kB large, so it has a tiny footprint on your site. The only dependency is jQuery (Most recent versions recommended).
+Just include the script and away you go. The minified file is 1.18kB large, so it has a tiny footprint on your site. The only dependency is jQuery (Most recent versions recommended).
 ```html
 <script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript" src="css-inject.min.js"></script>
