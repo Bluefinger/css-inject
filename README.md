@@ -94,7 +94,7 @@ This allows an object to mirror the logical construction of a CSS style rule, an
 	"selector": ["property"]
 }
 ```
-When removing a property, there's no need to map values to the CSS StyleSheet object, and as such all properties that are being declared for removal are listed in an array. Passing an empty array in this format is the same as `cssInject("selector")` in which the entire selector rule gets deleted as opposed to only removing a single property.
+When removing a property, there's no need to map values to the CSS StyleSheet object, and as such all properties that are being declared for removal are listed in an array. Passing an empty array in this format is the same as `cssInject.remove("selector")` in which the entire selector rule gets deleted as opposed to only removing a single property.
 
 ### Properties
 #### cssInject.styles
