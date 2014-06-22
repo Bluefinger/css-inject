@@ -7,12 +7,12 @@
 	}
 }(this, function(){
 	"use strict";
-	if (!Array.prototype.indexOf) {
+	if (!Array.prototype.indexOf) { // Array.indexOf Polyfill - for Internet Explorer 8 support
 		Array.prototype.indexOf = function (searchElement, fromIndex) {
 			if ( this === undefined || this === null ) {
 				throw new TypeError( '"this" is null or not defined' );
 			}
-			var length = this.length >>> 0; // Hack to convert object.length to a UInt32
+			var length = this.length >>> 0;
 			fromIndex = +fromIndex || 0;
 			if (Math.abs(fromIndex) === Infinity) {
 				fromIndex = 0;
@@ -49,14 +49,14 @@
 				}
 			}
 		};
-		this.addCss = function (selector, property, value, index) {
+		this.addCss = function (index, selector, property, value) {
 			if (this.obj.insertRule) {
 				this.obj.insertRule(selector + "{" + property + ":"+ value + ";}",index);
 			} else {
 				this.obj.addRule(selector, property + ":" + value + ";", index);
 			}
 		};
-		this.modifyCss = function (property, value, index) {
+		this.modifyCss = function (index, property, value) {
 			if (this.obj.cssRules) {
 				this.rules[index].style.setProperty(property,value);
 			} else if (this.obj.rules) {
@@ -66,15 +66,6 @@
 					this.rules[index].style.setAttribute(property,value);
 				}
 			}
-		};
-		this.findAttr = function (array, attr, value){
-			var i, l = array.length;
-			for (i = 0;i < l;i+=1) {
-				if (array[i][attr] === value) {
-					return i;
-				}
-			}
-			return -1;
 		};
 		this.init = function () {
 			var el, head;
@@ -92,11 +83,11 @@
 			var index = this.styles.indexOf(selector);
 			if (index > -1) {
 				this.styles[index].selector = selector;
-				this.modifyCss(property,value,index);
+				this.modifyCss(index,property,value);
 			} else {
 				this.styles.push(selector);
 				index = this.styles.length - 1;
-				this.addCss(selector, property, value, index);
+				this.addCss(index,selector, property, value);
 			}
 			return this;
 		};
