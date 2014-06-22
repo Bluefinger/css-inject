@@ -7,12 +7,12 @@
 	}
 }(this, function(){
 	"use strict";
-	if (!Array.prototype.indexOf) { // Array.indexOf Polyfill - for Internet Explorer 8 support
+	if (!Array.prototype.indexOf) {  // Array.indexOf Polyfill - for Internet Explorer 8 support
 		Array.prototype.indexOf = function (searchElement, fromIndex) {
 			if ( this === undefined || this === null ) {
 				throw new TypeError( '"this" is null or not defined' );
 			}
-			var length = this.length >>> 0;
+			var length = this.length >>> 0; // Hack to convert object.length to a UInt32
 			fromIndex = +fromIndex || 0;
 			if (Math.abs(fromIndex) === Infinity) {
 				fromIndex = 0;
@@ -82,34 +82,29 @@
 		this.add = function (selector, property, value) {
 			var index = this.styles.indexOf(selector);
 			if (index > -1) {
-				this.styles[index].selector = selector;
-				this.modifyCss(index,property,value);
+				this.styles[index] = selector;
+				this.modifyCss(index, property,value);
 			} else {
 				this.styles.push(selector);
 				index = this.styles.length - 1;
-				this.addCss(index,selector, property, value);
+				this.addCss(index, selector, property, value);
 			}
 			return this;
 		};
 		this.objectAdd = function (object) {
+			var selector, property;
 			if (typeof object === "object") {
-				var i, l = object.properties.length;
-				for (i = 0;i < l;i+=1) {
-					this.add(object.selector, object.properties[i].property, object.properties[i].value);
+				for (selector in object) {
+					if (object.hasOwnProperty(selector)){
+						for (property in object[selector]) {
+							if (object[selector].hasOwnProperty(property)) {
+								this.add(selector,property,object[selector][property]);
+							}
+						}
+					}
 				}
 			} else {
 				throw new TypeError("Parameter is not an object");
-			}
-			return this;
-		};
-		this.multiAdd = function (arr) {
-			var i, l = arr.length;
-			for (i = 0;i < l; i+=1) {
-				if (typeof arr[i] === "object") {
-					this.objectAdd(arr[i]);
-				} else {
-					throw new TypeError("Must pass an object item in the array");
-				}
 			}
 			return this;
 		};
@@ -125,13 +120,18 @@
 			}
 			return this;
 		};
-		this.multiRemove = function (arr) {
-			var i, l = arr.length;
-			for (i = 0;i < l; i+=1) {
-				if (typeof arr[i] === "object") {
-					this.remove(arr[i].selector, arr[i].property);
-				} else {
-					throw new TypeError("Must pass an object item in the array");
+		this.objectRemove = function (object) {
+			var selector, i, l;
+			for (selector in object) {
+				if (object.hasOwnProperty(selector)) {
+					l = (object[selector]) ? object[selector].length : 0;
+					if (l > 0) {
+						for (i=0, l=object[selector].length;i<l;i+=1) {
+							this.remove(selector, object[selector][i]);
+						}
+					} else {
+						this.remove(selector);
+					}
 				}
 			}
 			return this;
