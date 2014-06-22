@@ -63,7 +63,7 @@ cssInject.objectAdd(rules); // Inject the resulting CSS to the page
 ```
 
 ## Usage
-Just include the script and away you go. The minified file is 2.12kB large, so it has a tiny footprint on your site. It has no dependencies (not even jQuery!).
+Just include the script and away you go. The minified file is 1.85kB large, so it has a tiny footprint on your site. It requires ES5 javascript, so for legacy browsers it will require the use of [es5-shim.js](https://github.com/es-shims/es5-shim) as a dependency. Modern Browsers, such as Firefox, Chrome, and Internet Explorer 9+ all function correctly without need of dependencies.
 ```html
 <script type="text/javascript" src="css-inject.min.js"></script>
 <script type="text/javascript">
