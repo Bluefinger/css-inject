@@ -221,6 +221,9 @@ Modifies a css rule at the given index. Either an existing property is modified,
 #### cssInject.removeCss(index, property[optional])
 Removes a css rule from the given index. If a property is provided, the property is removed from the style. If no property is provided, then the entire selector at the given index is removed. Warning: will throw an error if the index points to an empty rule.
 
+#### cssInject.index(searchElement, array)
+Iterates through an array to find the matching search element and returns the array index if a match is found. Returns -1 if nothing is found. Similar to Array.prototype.indexOf but without the option of selecting a specific index to start searching from.
+
 ### Extend
 `cssInject` can be extended in much the same way jQuery can. There's a prototype shorthand, `cssInject.fn` that can be called to extend the functionality of the `cssInject` object. Chaining is achieved by adding `return this` to the end of any new function.
 ```js
