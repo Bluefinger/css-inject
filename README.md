@@ -4,8 +4,12 @@ CSS-Inject is a small utility script for handling dynamic injection of CSS styli
 
 CSS-Inject can track and handle subsequent changes to the generated stylesheet. CSS-Inject only accesses the DOM once to create a stylesheet element, from which it then hooks into the browser's CSSStylesheet Object to directly create and manage dynamically created CSS styles. This then allows multiple elements on a page to be styled efficiently without any inline-styles having to be injected into the DOM a la jQuery. This result is a much more efficient approach to dynamic styling that avoids excessive DOM manipulation.
 
+As of v1.1, CSS-Inject also handles inline styles. In most use cases where only a small number of elements and styles need to be changed, applying inline styling is faster and easier to manage. However, if more than three styles are being applied to more than 5 elements at a time, then utilising the generated stylesheet becomes more performant.
+
 ## Caveat
-CSS-Inject's performance scales far better than jQuery when it comes to styling multiple elements on a page, though performance for styling a single element is roughly comparable with jQuery depending on the amount of styles being applied to a given element. In most cases, CSS-Inject is faster than jQuery for applying styles, even with a single element and the performance difference increases dramatically once more than one elements are being dynamically styled.
+CSS-Inject's performance scales far better than jQuery when it comes to styling multiple elements on a page, and styling inline is quicker with CSS-Inject than with jQuery. The styling is done closer to native javascript and without as much need to compensate for legacy browsers, allowing for much slimmer code. CSS-Inject does abstract some browser dependent quirks with styling, support is only given towards Internet Explorer 8 at the minimum. This allows for more performant code without needing to bloat the code to account for legacy javascript implementations.
+
+However, performant styling requires managing just how often styles are applied and how many styles are being dynamically generated. Consider just how many styles/elements need to be changed and the frequency of changes before using CSS-Inject. For example, it is quicker to apply a single CSS add operation with an object of styles than to chain multiple single add operations when first creating a new CSS rule.
 
 ## Quick Example
 ```javascript
@@ -61,9 +65,16 @@ rules[selector] = {
 };
 cssInject.objectAdd(rules); // Inject the resulting CSS to the page
 ```
+### Inline Styles
+```javascript
+var element = document.getElementById("content"),
+	elements = document.getElementsByClassName("stuff");
+cssInject.addInline(element, "width", "300px"); // Only sets to a single element
+cssInject.addObjectInline(elements, {"height":"200px"}); Adds to lots of elements
+```
 
 ## Usage
-Just include the script and away you go. The minified file is 1.85kB large, so it has a tiny footprint on your site. It requires ES5 javascript, so for legacy browsers it will require the use of [es5-shim.js](https://github.com/es-shims/es5-shim) as a dependency. Modern Browsers, such as Firefox, Chrome, and Internet Explorer 9+ all function correctly without need of dependencies.
+Just include the script and away you go. The minified file is 2.72kB large, so it has a tiny footprint on your site. As of v1.1, it no longer requires ES5 javascript nor requires the use of [es5-shim.js](https://github.com/es-shims/es5-shim) as a dependency. As such, modern Browsers such as Firefox, Chrome, and Internet Explorer 8+ all function correctly without need of dependencies.
 ```html
 <script type="text/javascript" src="css-inject.min.js"></script>
 <script type="text/javascript">
@@ -95,6 +106,17 @@ This allows an object to mirror the logical construction of a CSS style rule, an
 }
 ```
 When removing a property, there's no need to map values to the CSS StyleSheet object, and as such all properties that are being declared for removal are listed in an array. Passing an empty array in this format is the same as `cssInject.remove("selector")` in which the entire selector rule gets deleted as opposed to only removing a single property.
+
+For inline elements, the object model for adding styles is as follows:
+```
+{
+	"property" : "value"
+}
+```
+Due to there not needing a selector to be attached to the object as the styles are applied directly to the element, the object is simplified to only need to the properties and their corresponding values be declared. With there being no need to have a selector, removing style properties from inline objects requires only an array containing the properties that are being removed:
+```
+["property 1", "property 2", ... ]
+```
 
 ### Properties
 #### cssInject.styles
@@ -145,13 +167,46 @@ cssInject.remove("#content", "height"); // The height property is no longer pres
 ```
 
 #### cssInject.objectRemove(object)
-Removes all mapped selectors and properties in the passed object. If a selector has an array of properties, those specific properties get removed. If a selector is passed with an empty array, the entire selector rule gets removed.
+Removes all mapped selectors and properties in the passed object. If a selector has an array of properties, those specific properties get removed. If a selector is passed with an empty array, the entire selector rule gets removed. This method can be chained.
 ```js
 var purge = {
 	"#content" : ["height","background"], // Height and Background properties will be deleted
 	"#aside" : [] // The entire #aside CSS rule will be deleted
 }
 cssInject.objectRemove(obj);
+```
+
+#### cssInject.addInline(element, property, value)
+Adds an inline style to an element. Only can add one style to a single element. This method can be chained.
+```js
+var el = document.getElementById("content");
+cssInject.addInline(el, "width", "300px");
+```
+
+#### cssInject.addObjectInline(elements, object)
+Maps an object of css properties/values to the styles of either a single element or a collection of elements. This method can be chained.
+```js
+var css = {
+		"font-weight" : "bold",
+		"background" : "#ccc"
+	},
+	elements = document.getElementsByClassName("stuff");
+cssInject.addObjectInline(elements, css);
+```
+
+#### cssInject.removeInline(element, property)
+Removes a single css property from the inline style of an element. Will only remove the style from a single element. This method can be chained.
+```js
+var el = document.getElementById("content");
+cssInject.removeInline(el, "height");
+```
+
+#### cssInject.removeArrayInline(elements, array)
+Removes the properties listed in the array from an element or a collection of elements. If an empty array is provided, all the inline styles in the element(s) are removed. This method can be chained.
+```js
+var arr = ["font-weight", "background"],
+	elements = document.getElementsByClassName("stuff");
+cssInject.removeArrayInline(elements, arr);
 ```
 
 #### cssInject.init()
